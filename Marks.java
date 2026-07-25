@@ -2,151 +2,120 @@ import java.util.Scanner;
 
 public class Marks {
 
-    public static void main(String[] args) {
-
-        Scanner input = new Scanner(System.in);
-
-        System.out.print("Enter number of students: ");
-        int n = input.nextInt();
-
+static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of students (n): ");
+        int n = sc.nextInt();
         int[][] marks = new int[n][3];
 
-        while (true) {
+        boolean running = true;
+        // add: Enter all 3 marks for one student
+        // update: change subject mark of one student
+        // average_s: shows the mark the student got in each subject separately
+        // average: adds up all 3 marks and divides by 3
+        // total: adds up all 3 marks and shows the sum
+        // grades: prints a table showing all student's grade
 
-            System.out.println("\n===== MENU =====");
-            System.out.println("1. Add student marks");
-            System.out.println("2. Update student mark");
-            System.out.println("3. Student Average");
-            System.out.println("4. Subject Average");
-            System.out.println("5. Student Total");
-            System.out.println("6. Grades");
-            System.out.println("7. Exit");
+        while (running) {
+            System.out.print("\nEnter command: ");
+            String command = sc.next();
 
-            System.out.print("Enter your choice: ");
-            int choice = input.nextInt();
+            if (command.equals("add")) {
+                System.out.print("Enter student ID: ");
+                int studentID = sc.nextInt();
+                int row = studentID - 1;
 
-            switch (choice) {
+                System.out.print("Enter Mathematics mark: ");
+                marks[row][0] = sc.nextInt();
+                System.out.print("Enter Chemistry mark: ");
+                marks[row][1] = sc.nextInt();
+                System.out.print("Enter Physics mark: ");
+                marks[row][2] = sc.nextInt();
 
-                case 1:
+                System.out.println("Marks saved for Student " + studentID);
+            }
 
-                    System.out.print("Enter Student ID (1-" + n + "): ");
-                    int student = input.nextInt() - 1;
+            else if (command.equals("update")) {
+                System.out.print("Enter student ID: ");
+                int studentID = sc.nextInt();
+                System.out.print("Enter subject ID (1=Maths, 2=Chemistry, 3=Physics): ");
+                int subjectID = sc.nextInt();
 
-                    System.out.print("Mathematics: ");
-                    marks[student][0] = input.nextInt();
+                int row = studentID - 1;
+                int column = subjectID - 1; 
 
-                    System.out.print("Chemistry: ");
-                    marks[student][1] = input.nextInt();
+                System.out.print("Enter new mark: ");
+                marks[row][column] = sc.nextInt();
 
-                    System.out.print("Physics: ");
-                    marks[student][2] = input.nextInt();
+                System.out.println("Mark updated for Student " + studentID);
+            }
 
-                    System.out.println("Marks Added Successfully.");
-                    break;
+            else if (command.equals("average_s")) {
+                System.out.print("Enter student ID: ");
+                int studentID = sc.nextInt();
+                int row = studentID - 1;
 
-                case 2:
+                System.out.println("Mathematics: " + marks[row][0]);
+                System.out.println("Chemistry: " + marks[row][1]);
+                System.out.println("Physics: " + marks[row][2]);
+            }
 
-                    System.out.print("Enter Student ID: ");
-                    student = input.nextInt() - 1;
+            else if (command.equals("average")) {
+                System.out.print("Enter student ID: ");
+                int studentID = sc.nextInt();
+                int row = studentID - 1;
+                int total = marks[row][0] + marks[row][1] + marks[row][2];
+                double average = total / 3.0;
 
-                    System.out.println("Subject IDs");
-                    System.out.println("1-Mathematics");
-                    System.out.println("2-Chemistry");
-                    System.out.println("3-Physics");
+                System.out.println("Average mark: " + average);
+            }
 
-                    System.out.print("Enter Subject ID: ");
-                    int subject = input.nextInt() - 1;
+            else if (command.equals("total")) {
+                System.out.print("Enter student ID: ");
+                int studentID = sc.nextInt();
+                int row = studentID - 1;
+                int total = marks[row][0] + marks[row][1] + marks[row][2];
 
-                    System.out.print("Enter New Mark: ");
-                    marks[student][subject] = input.nextInt();
+                System.out.println("Total mark: " + total);
+            }
 
-                    System.out.println("Updated Successfully.");
-                    break;
+            
+            else if (command.equals("grades")) {
+                System.out.println("Student\tMathematics\tChemistry\tPhysics");
 
-                case 3:
+                for (int row = 0; row < n; row++) {
+                    int studentID = row + 1;
+                    String mathsGrade = getGrade(marks[row][0]);
+                    String chemistryGrade = getGrade(marks[row][1]);
+                    String physicsGrade = getGrade(marks[row][2]);
 
-                    System.out.print("Enter Student ID: ");
-                    student = input.nextInt() - 1;
+                    System.out.println(studentID + "\t" + mathsGrade + "\t\t" + chemistryGrade + "\t\t" + physicsGrade);
+                }
+            }
 
-                    double avg = (marks[student][0] + marks[student][1] + marks[student][2]) / 3.0;
+            else if (command.equals("exit")) {
+                running = false;
+            }
 
-                    System.out.println("Student Average = " + avg);
-
-                    break;
-
-                case 4:
-
-                    System.out.println("Subject IDs");
-                    System.out.println("1-Mathematics");
-                    System.out.println("2-Chemistry");
-                    System.out.println("3-Physics");
-
-                    System.out.print("Enter Subject ID: ");
-                    subject = input.nextInt() - 1;
-
-                    int total = 0;
-
-                    for (int i = 0; i < n; i++) {
-                        total += marks[i][subject];
-                    }
-
-                    System.out.println("Subject Average = " + (total / (double) n));
-
-                    break;
-
-                case 5:
-
-                    System.out.print("Enter Student ID: ");
-                    student = input.nextInt() - 1;
-
-                    total = marks[student][0] + marks[student][1] + marks[student][2];
-
-                    System.out.println("Total Marks = " + total);
-
-                    break;
-
-                case 6:
-
-                    System.out.println();
-                    System.out.println("Student\tMath\tChem\tPhysics");
-
-                    for (int i = 0; i < n; i++) {
-
-                        System.out.print((i + 1) + "\t");
-
-                        for (int j = 0; j < 3; j++) {
-                            System.out.print(getGrade(marks[i][j]) + "\t");
-                        }
-
-                        System.out.println();
-                    }
-
-                    break;
-
-                case 7:
-
-                    System.out.println("Program Ended.");
-                    input.close();
-                    return;
-
-                default:
-
-                    System.out.println("Invalid Choice");
+            else {
+                System.out.println("Unknown command. Try: add, update, average_s, average, total, grades, exit");
             }
         }
+
+        sc.close();
     }
 
-    public static String getGrade(int mark) {
-
-        if (mark >= 90)
-            return "A";
-        else if (mark >= 80)
-            return "B";
-        else if (mark >= 70)
-            return "C";
-        else if (mark >= 60)
-            return "D";
-        else
+    static String getGrade(int mark) {
+        if (mark >= 90) {
+            return "Grade A";
+        } else if (mark >= 80) {
+            return "Grade B";
+        } else if (mark >= 70) {
+            return "Grade C";
+        } else if (mark >= 60) {
+            return "Grade D";
+        } else {
             return "Fail";
+        }
     }
 }
